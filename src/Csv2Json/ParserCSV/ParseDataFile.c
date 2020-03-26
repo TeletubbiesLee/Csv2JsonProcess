@@ -13,9 +13,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "./ParserCSV/csv.h"
+#include "csv.h"
 #include "ParseDataFile.h"
-#include "../Config.h"
+#include "../../Config.h"
 
 static int String2Int(char *string, int stringLenth);
 
@@ -23,9 +23,9 @@ static int String2Int(char *string, int stringLenth);
  * @fn ParseCSVDataFile
  * @brief 解析数据文件。将CSV数据文件解析为字符串
  * @param fileName 文件名
- * @param dataString 用于存放解析完成后的字符串
+ * @param registerData 用于存放解析完成后的数据
  * @param arrayNumber 数据数组大小
- * @return 成功:0 错误:其他
+ * @return 成功:解析到的数据个数 错误:-1
  */
 int ParseCSVDataFile(char *fileName, int registerData[], int arrayNumber)
 {
@@ -34,29 +34,32 @@ int ParseCSVDataFile(char *fileName, int registerData[], int arrayNumber)
     char *csvLineString = NULL;     //一行csv文件字符串
     char **parsed = NULL;           //一个csv文件中一个字符串元素
     int i = 0, num = 0;
+    int fileDataNum = 0, dataNum = 0;;
 
 	if(NULL == registerData)
 	{
 		printf_debug("error:dataString[%d] is NULL!\n", arrayNumber);
-		return POINT_NULL;
+		return FUNCTION_FAIL;
 	}
 
     if((fp = fopen(fileName, "r")) == NULL)
     {
     	printf_debug("error:%s open fail!\n", fileName);
-    	return OPEN_FILE_FAIL;
+    	return FUNCTION_FAIL;
     }
 
     /* 保存信息的格式：Data Name,数据名称,Start Address,起始地址,Number,数量, */
     csvLineString = fread_csv_line(fp, CSV_LINE_MAX, &done, &err);
     parsed = parse_csv(csvLineString);
+    fileDataNum = String2Int(parsed[5], strlen(parsed[5]));
+    dataNum = (fileDataNum < arrayNumber ? fileDataNum : arrayNumber);
 
-    while(num < arrayNumber)
+    while(num < dataNum)
     {
         csvLineString = fread_csv_line(fp, CSV_LINE_MAX, &done, &err);
         parsed = parse_csv(csvLineString);
 
-        for(i = 0; i < 10 && num < arrayNumber; i++)
+        for(i = 0; i < 10 && num < dataNum; i++)
         {
         	registerData[num] = String2Int(parsed[i], strlen(parsed[i]));
             num++;
@@ -70,7 +73,7 @@ int ParseCSVDataFile(char *fileName, int registerData[], int arrayNumber)
     free_csv_line(parsed);
     parsed = NULL;
 
-    return NO_ERROR;
+    return num;
 }
 
 

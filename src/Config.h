@@ -18,15 +18,17 @@
 #endif
 
 #define CSV_LINE_MAX			1024			//csv数据文件一行的最大字符数
-#define DATA_STRING_MAX			8				//一个数据字符串的最大字符串
-#define DATA_STRING_BUF_NUM		40				//存放数据字符串的缓存区大小
-#define DATA_NUMBER				12				//数据个数
-
-#define JSON_FILENAME			"MqttConfigFile.json"
-#define NAME_STRING_MAX			30				//配置结构体的名称字符串最大长度
-#define VALUE_STRING_MAX		40				//配置结构体的配置值字符串最大长度
-
-#define MOSQUITTO_PATHNAME		"~/mosquitto_pub"
+#define FILENAME_STRING_MAX		40				//文件名最大字符数
+#define JSON_DIR_NAME			"/home/root/JSON_Data/"		//json文件夹
+//#define DATA_STRING_MAX			8				//一个数据字符串的最大字符串
+//#define DATA_STRING_BUF_NUM		40				//存放数据字符串的缓存区大小
+//#define DATA_NUMBER				12				//数据个数
+//
+//#define JSON_FILENAME			"MqttConfigFile.json"
+//#define NAME_STRING_MAX			30				//配置结构体的名称字符串最大长度
+//#define VALUE_STRING_MAX		40				//配置结构体的配置值字符串最大长度
+//
+//#define MOSQUITTO_PATHNAME		"~/mosquitto_pub"
 
 /* 程序错误码 */
 typedef enum {

@@ -12,7 +12,7 @@
 #ifndef _PARSE_DATA_FILE_H_
 #define _PARSE_DATA_FILE_H_
 
-int ParseCSVDataFile(char *fileName, char *dataString[], int arrayNumber);
+int ParseCSVDataFile(char *fileName, int registerData[], int arrayNumber);
 
 #endif
 

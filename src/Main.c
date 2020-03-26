@@ -9,11 +9,77 @@
  * @version ver 1.0
  */
 
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include "Config.h"
+#include "Csv2Json/DataProcess/Sojo_DataProcess.h"
+
 
 int main(int argc, char *arhv[])
 {
+	int i = 0, j = 0, ret = NO_ERROR;
+	char newPathname[60] = {0};					//存放新文件夹路径
+	DIR *csvDataDirentPoint = NULL;			//存放csv数据文件的文件夹指针
+	char *csvDataDirentName = "CSV_Data";		//存放csv数据文件的文件夹名字
+	char *backupDirentName = "/home/root/backup/";			//数据备份文件夹路径
+	struct dirent *csvFile = NULL;				//csv数据文件结构体指针
+	struct stat fileStat;						//文件状态
+	char historyFile[20][60];
 
-	return 0;
+	for(i = 0; i < 20; i++)
+	{
+		memset(historyFile[i], 0, sizeof(historyFile[i]));
+	}
+
+	/* 建立数据备份文件夹 */
+	mkdir(backupDirentName, S_IRWXU);
+
+	//while(1)
+	{
+		j = 0;
+		if((csvDataDirentPoint = opendir(csvDataDirentName)) == NULL)
+		{
+			printf_debug("Cannot open directory: %s\n", csvDataDirentName);
+		}
+		chdir(csvDataDirentName);
+
+		/* 依次读取该文件夹下的文件 */
+		while((csvFile = readdir(csvDataDirentPoint)) != NULL  && j < 20)
+		{
+			lstat(csvFile->d_name, &fileStat);
+			if(S_ISREG(fileStat.st_mode))			//判断是否为文件
+			{
+				printf("open file %s\n", csvFile->d_name);
+				//SOJO_Csv2Json(csvFile->d_name);
+
+				strncpy(historyFile[j++], csvFile->d_name, strlen(csvFile->d_name));
+			}
+			sleep(1);
+		}
+
+		/* 将传输完毕的数据文件进行备份 */
+		for(i = 0; i < j; i++)
+		{
+			memset(newPathname, 0, sizeof(newPathname));
+			strncat(newPathname, backupDirentName, strlen(backupDirentName));
+			strncat(newPathname, historyFile[i], strlen(historyFile[i]));
+			printf("%s -> %s\n", historyFile[i], newPathname);
+			rename(historyFile[i], newPathname);
+			memset(historyFile[i], 0, strlen(historyFile[i]));
+		}
+
+		chdir("../");
+		closedir(csvDataDirentPoint);
+
+		//sleep(10);
+	}
+
+	return ret;
 }
 
 
