@@ -49,13 +49,13 @@ int main(int argc, char *arhv[])
 		chdir(csvDataDirentName);
 
 		/* 依次读取该文件夹下的文件 */
-		while((csvFile = readdir(csvDataDirentPoint)) != NULL  && j < 20)
+		while((csvFile = readdir(csvDataDirentPoint)) != NULL && j < 20)
 		{
 			lstat(csvFile->d_name, &fileStat);
 			if(S_ISREG(fileStat.st_mode))			//判断是否为文件
 			{
 				printf("open file %s\n", csvFile->d_name);
-				//SOJO_Csv2Json(csvFile->d_name);
+				SOJO_Csv2Json(csvFile->d_name);
 
 				strncpy(historyFile[j++], csvFile->d_name, strlen(csvFile->d_name));
 			}

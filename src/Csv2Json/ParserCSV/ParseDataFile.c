@@ -68,10 +68,6 @@ int ParseCSVDataFile(char *fileName, int registerData[], int arrayNumber)
 
     fclose(fp);
     fp = NULL;
-    free(csvLineString);
-    csvLineString = NULL;
-    free_csv_line(parsed);
-    parsed = NULL;
 
     return num;
 }
