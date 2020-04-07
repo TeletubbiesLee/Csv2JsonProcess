@@ -36,12 +36,12 @@ static int SOJO_SaveJsonFile(char *fileName, int modeSelection, int arrayNumber)
  */
 int SOJO_Csv2Json(char *csvFilename)
 {
-	int dataArray[100] = {0};
+	int dataArray[512] = {0};
 	int dataNumber = 0;
 	char fileName[FILENAME_STRING_MAX] = {0};    //文件名
 	char temp[20] = {0};
 
-	dataNumber = ParseCSVDataFile(csvFilename, dataArray, 100);
+	dataNumber = ParseCSVDataFile(csvFilename, dataArray, 512);
 	SOJO_TemperatureDataProcess(dataArray, dataNumber);
 
 	GetTimeStr(temp);
